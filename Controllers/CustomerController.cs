@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
-using System.Runtime.Remoting;
-using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
 using IC_MVP_Project_Task1.DAL;
 using IC_MVP_Project_Task1.Models;
-using NLog;
 
 namespace IC_MVP_Project_Task1.Controllers
 {
@@ -26,7 +19,7 @@ namespace IC_MVP_Project_Task1.Controllers
         {
             var dataSourceList = new List<Customer>();
 
-            for(int i = 0; i < db.Customers.ToList().Count(); i++)
+            for (int i = 0; i < db.Customers.ToList().Count(); i++)
             {
                 dataSourceList.Add(new Customer
                 {
@@ -34,7 +27,7 @@ namespace IC_MVP_Project_Task1.Controllers
                     Name = db.Customers.ToList()[i].Name,
                     Address = db.Customers.ToList()[i].Address
                 });
-            }            
+            }
 
             // convert it to array
             var dataSource = dataSourceList.ToArray();
