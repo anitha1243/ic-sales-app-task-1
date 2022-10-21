@@ -150,12 +150,16 @@
     <Content Include="Scripts\DeleteModalButton.jsx" />
     <Content Include="Scripts\EditModalButton.jsx" />
     <Content Include="Scripts\ModalButton.jsx" />
+    <Content Include="Scripts\Customers.jsx" />
     <Content Include="Scripts\ReactJS.jsx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\ReactConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\SaleController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\SalesContext.cs" />

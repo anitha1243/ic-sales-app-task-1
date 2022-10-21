@@ -46,10 +46,10 @@ function EditModalButton(props) {
                         <Label>NAME</Label>
                         <Input onChange={event => setName(event.target.value)} />
                     </div>
-                    <div>
+                    {props.custId ==0 && <div>
                         <Label>ADDRESS</Label>
                         <Input onChange={event => setAddress(event.target.value)} />
-                    </div>                   
+                    </div>}                  
                     
                 </Modal.Description>
             </Modal.Content>

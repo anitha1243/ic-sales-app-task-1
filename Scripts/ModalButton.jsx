@@ -24,8 +24,6 @@ function ModalButton() {
             request.onload = function () {
                 if (request.readyState == 4 && request.status == 200) {
                     var response = JSON.parse(request.responseText);
-                    console.log(response);
-                    //alert("Hello: " + response.Name);
                 }
             }.bind(this);
             request.send(params);
