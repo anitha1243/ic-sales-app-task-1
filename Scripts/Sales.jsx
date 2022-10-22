@@ -41,6 +41,12 @@
     render() {
         let serviceList = this.state.serviceList;
         let tableData = null;
+        /*let stores = null;
+        let customers = null;
+        let products = null;
+        serviceList.map(s => {
+
+        })*/
 
         if (serviceList != "") {
             tableData = serviceList.map(service =>

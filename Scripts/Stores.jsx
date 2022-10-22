@@ -1,43 +1,10 @@
 ﻿class Stores extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            serviceList: []
-        };
-
-        this.loadData = this.loadData.bind(this);
-    }
-    componentDidMount() {
-        this.loadData();
-    }
-
-    loadData() {
-        var request;
-        if (window.XMLHttpRequest) {
-            //New browsers.
-            request = new XMLHttpRequest();
-        }
-        else if (window.ActiveXObject) {
-            //Old IE Browsers.
-            request = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        
-        if (request != null) {
-
-            request.open("GET", "/Store/Index", false);
-            request.setRequestHeader("Content-Type", "application/json");
-            request.onload = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    const obj = JSON.parse(request.responseText);
-                    this.setState({ serviceList: obj });
-                }
-            }.bind(this);
-            request.send();
-        }
-    }
+    }   
    
     render() {
-        let serviceList = this.state.serviceList;
+        let serviceList = this.props.stores;
         let tableData = null;
 
         if (serviceList != "") {

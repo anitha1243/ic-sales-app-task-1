@@ -1,33 +1,123 @@
 ﻿const { Tab } = semanticUIReact
 class ReactAJAX extends React.Component {
     constructor(props) {
+        
         super(props);
         this.state = {
+            customers: [],
+            storesList: [],
+            products: [],
             panes: [
                 {
                     menuItem: 'React',
-                    render: () => <Tab.Pane attached={false}><Customers /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Customers customers={this.state.customers} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Customers',
-                    render: () => <Tab.Pane attached={false}><Customers /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Customers customers={this.state.customers} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Products',
-                    render: () => <Tab.Pane attached={false}><Products /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Products products={this.state.products} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Stores',
-                    render: () => <Tab.Pane attached={false}><Stores /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Stores stores={this.state.storesList} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Sales',
-                    render: () => <Tab.Pane attached={false}><Sales /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Sales customers={this.state.customers} /></Tab.Pane>,
                 }
             ]
         };
+
+        this.loadCustomerData = this.loadCustomerData.bind(this);
+        this.loadProductData = this.loadProductData.bind(this);
+        this.loadStoreData = this.loadStoreData.bind(this);
     }
-     
+
+    componentDidMount() {
+        this.loadCustomerData();
+        this.loadProductData();
+        this.loadStoreData();
+    }
+
+    loadCustomerData() {
+        var request;
+        if (window.XMLHttpRequest) {
+            //New browsers.
+            request = new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject) {
+            //Old IE Browsers.
+            request = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        if (request != null) {
+
+            request.open("GET", "/Customer/Index", false);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.onload = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                    const obj = JSON.parse(request.responseText);
+                    this.setState({ customers: obj });
+                }
+            }.bind(this);
+            request.send();
+        }
+    }
+
+    loadProductData() {
+        var request;
+        if (window.XMLHttpRequest) {
+            //New browsers.
+            request = new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject) {
+            //Old IE Browsers.
+            request = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        if (request != null) {
+
+            request.open("GET", "/Product/Index", false);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.onload = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                    const obj = JSON.parse(request.responseText);
+                    this.setState({ products: obj });
+                }
+            }.bind(this);
+            request.send();
+        }
+    }
+
+    loadStoreData() {
+        var request;
+        if (window.XMLHttpRequest) {
+            //New browsers.
+            request = new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject) {
+            //Old IE Browsers.
+            request = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        if (request != null) {
+
+            request.open("GET", "/Store/Index", false);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.onload = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                    const obj = JSON.parse(request.responseText);
+                    console.log(obj);
+                    this.setState({ storesList: obj });
+                    console.log(this.state.storesList);
+                }
+            }.bind(this);
+            request.send();
+        }
+    }     
    
     render() {
 

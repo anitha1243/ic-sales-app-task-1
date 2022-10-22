@@ -1,8 +1,10 @@
-﻿function EditModalButton(props) {
+﻿const { Select } = semanticUIReact
+function EditModalButton(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState(props.name);
     const [address, setAddress] = React.useState(props.address);
     const [price, setPrice] = React.useState(props.price);
+    const [dateSold, setDateSold] = React.useState(props.DateSold);
 
     function saveRecord() {
         setOpen(false)
@@ -57,6 +59,27 @@
                         <Label>PRICE</Label>
                         <Input value={price} onChange={event => setPrice(event.target.value)} />
                     </div>}
+                    <Select placeholder='Select your country' options={[]} />
+                    {props.pageType == 'Sale' && 
+                        <>
+                        <div>
+                            <Label>DATE SOLD</Label>
+                            <Input value={dateSold} onChange={event => setDateSold(event.target.value)} />
+                        </div>
+                        <div>
+                            <Label>STORE ID</Label>
+                            <Select options={[]} />
+                        </div>
+                        <div>
+                            <Label>CUSTOMER ID</Label>
+                            <Select options={[]} />
+                        </div>
+                        <div>
+                            <Label>PRODUCT ID</Label>
+                            <Select options={[]} />
+                        </div>
+                        </>
+                     }
                     
                 </Modal.Description>
             </Modal.Content>
