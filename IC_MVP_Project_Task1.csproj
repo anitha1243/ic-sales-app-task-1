@@ -147,6 +147,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Sales.jsx" />
+    <Content Include="Scripts\Stores.jsx" />
+    <Content Include="Scripts\Products.jsx" />
     <Content Include="Scripts\DeleteModalButton.jsx" />
     <Content Include="Scripts\EditModalButton.jsx" />
     <Content Include="Scripts\ModalButton.jsx" />

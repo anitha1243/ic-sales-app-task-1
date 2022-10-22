@@ -1,5 +1,4 @@
-﻿const { Icon, Menu, Table } = semanticUIReact
-class Customers extends React.Component {
+﻿class Sales extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,11 +24,13 @@ class Customers extends React.Component {
         
         if (request != null) {
 
-            request.open("GET", "/Customer/Index", false);
+            request.open("GET", "/Sale/Index", false);
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
+                console.log(request);
                 if (request.readyState == 4 && request.status == 200) {
                     const obj = JSON.parse(request.responseText);
+                    console.log(obj);
                     this.setState({ serviceList: obj });
                 }
             }.bind(this);
@@ -44,22 +45,26 @@ class Customers extends React.Component {
         if (serviceList != "") {
             tableData = serviceList.map(service =>
                 <Table.Row key={service.ID}>
-                    <Table.Cell>{service.Name}</Table.Cell>
-                    <Table.Cell>{service.Address}</Table.Cell>
-                    <Table.Cell><EditModalButton pageType="Customer" name={service.Name} address={service.Address} recId={service.ID}/></Table.Cell>
-                    <Table.Cell><DeleteModalButton pageType="Customer" recId={service.ID} /></Table.Cell>
+                    <Table.Cell>{service.Customer.Name}</Table.Cell>
+                    <Table.Cell>{service.Store.Name}</Table.Cell>
+                    <Table.Cell>{service.Product.Name}</Table.Cell>
+                    <Table.Cell>{service.DateSold}</Table.Cell>
+                    <Table.Cell><EditModalButton pageType="Sale" CustomerID={service.CustomerID} StoreID={service.StoreID} ProductID={service.ProductID} DateSold={service.DateSold} recId={service.ID} /></Table.Cell>
+                    <Table.Cell><DeleteModalButton pageType="Sale" recId={service.ID} /></Table.Cell>
                 </Table.Row>
             )
         }
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Customer" />
+                <ModalButton pageType="Sale" />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>Name</Table.HeaderCell>
-                            <Table.HeaderCell>Address</Table.HeaderCell>
+                            <Table.HeaderCell>CustomerID</Table.HeaderCell>
+                            <Table.HeaderCell>StoreID</Table.HeaderCell>
+                            <Table.HeaderCell>ProductID</Table.HeaderCell>
+                            <Table.HeaderCell>DateSold</Table.HeaderCell>
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                         </Table.Row>

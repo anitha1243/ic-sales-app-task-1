@@ -2,6 +2,7 @@
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState(props.name);
     const [address, setAddress] = React.useState(props.address);
+    const [price, setPrice] = React.useState(props.price);
 
     function saveRecord() {
         setOpen(false)
@@ -17,7 +18,9 @@
         if (request != null) {
 
             request.open("POST", "/" + props.pageType + "/Edit" + props.pageType, false);
-            var params = "{ID: " + props.custId + ", Name: '" + name + "', Address: '" + address + "'}";
+            var params = props.pageType === 'Customer' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" :
+                props.pageType === 'Product' ? "{ID: " + props.recId + ", Name: '" + name + "', Price: '" + price + "'}" :
+                    props.pageType === 'Store' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" : "";
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
                 if (request.readyState == 4 && request.status == 200) {
@@ -36,9 +39,9 @@
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
-            trigger={<Button>Edit Customer</Button>}
+            trigger={<Button>Edit {props.pageType}</Button>}
         >
-            <Modal.Header>Edit Customer</Modal.Header>
+            <Modal.Header>Edit {props.pageType}</Modal.Header>
             <Modal.Content image>
                 
                 <Modal.Description>
@@ -46,10 +49,14 @@
                         <Label>NAME</Label>
                         <Input onChange={event => setName(event.target.value)} value={name}  />
                     </div>
-                    {props.pageType == 'Customer' && <div>
+                    {(props.pageType == 'Customer' || props.pageType == 'Store') && <div>
                         <Label>ADDRESS</Label>
                         <Input value={address} onChange={event => setAddress(event.target.value)} />
-                    </div>}                  
+                    </div>}
+                    {props.pageType == 'Product' && <div>
+                        <Label>PRICE</Label>
+                        <Input value={price} onChange={event => setPrice(event.target.value)} />
+                    </div>}
                     
                 </Modal.Description>
             </Modal.Content>

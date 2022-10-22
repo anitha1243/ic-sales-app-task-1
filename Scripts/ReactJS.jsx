@@ -14,15 +14,15 @@ class ReactAJAX extends React.Component {
                 },
                 {
                     menuItem: 'Products',
-                    render: () => <Tab.Pane attached={false}>Tab 3 Content</Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Products /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Stores',
-                    render: () => <Tab.Pane attached={false}>Tab 3 Content</Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Stores /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Sales',
-                    render: () => <Tab.Pane attached={false}>Tab 3 Content</Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Sales /></Tab.Pane>,
                 }
             ]
         };

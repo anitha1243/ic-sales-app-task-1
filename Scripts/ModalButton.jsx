@@ -3,6 +3,7 @@ function ModalButton(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState("");
     const [address, setAddress] = React.useState("");
+    const [price, setPrice] = React.useState("");
 
     function saveRecord() {
         setOpen(false)
@@ -19,7 +20,8 @@ function ModalButton(props) {
 
             request.open("POST", "/" + props.pageType + "/Create" + props.pageType, false);
             var params = props.pageType === 'Customer' ? "{name: '" + name + "', address: '" + address + "'}" :
-                props.pageType === 'Product' ? "{name: '" + name + "', price: '" + price + "'}" : "";
+                props.pageType === 'Product' ? "{name: '" + name + "', price: '" + price + "'}" :
+                    props.pageType === 'Store' ? "{name: '" + name + "', address: '" + address + "'}" : "";
             console.log(params);
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
@@ -50,7 +52,15 @@ function ModalButton(props) {
                     {props.pageType === 'Customer' && <div>
                         <Label>ADDRESS</Label>
                         <Input onChange={event => setAddress(event.target.value)} />
-                    </div>}                  
+                    </div>}  
+                    {props.pageType === 'Product' && <div>
+                        <Label>PRICE</Label>
+                        <Input onChange={event => setPrice(event.target.value)} />
+                    </div>}
+                    {props.pageType === 'Store' && <div>
+                        <Label>ADDRESS</Label>
+                        <Input onChange={event => setAddress(event.target.value)} />
+                    </div>} 
                     
                 </Modal.Description>
             </Modal.Content>

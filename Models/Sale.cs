@@ -16,7 +16,9 @@ namespace IC_MVP_Project_Task1.Models
         public DateTime DateSold { get; set; }
 
         public virtual Customer Customer { get; set; }
+
         public virtual Store Store { get; set; }
+
         public virtual Product Product { get; set; }
     }
 }

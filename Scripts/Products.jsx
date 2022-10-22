@@ -1,5 +1,4 @@
-﻿const { Icon, Menu, Table } = semanticUIReact
-class Customers extends React.Component {
+﻿class Products extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,7 +24,7 @@ class Customers extends React.Component {
         
         if (request != null) {
 
-            request.open("GET", "/Customer/Index", false);
+            request.open("GET", "/Product/Index", false);
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
                 if (request.readyState == 4 && request.status == 200) {
@@ -45,21 +44,21 @@ class Customers extends React.Component {
             tableData = serviceList.map(service =>
                 <Table.Row key={service.ID}>
                     <Table.Cell>{service.Name}</Table.Cell>
-                    <Table.Cell>{service.Address}</Table.Cell>
-                    <Table.Cell><EditModalButton pageType="Customer" name={service.Name} address={service.Address} recId={service.ID}/></Table.Cell>
-                    <Table.Cell><DeleteModalButton pageType="Customer" recId={service.ID} /></Table.Cell>
+                    <Table.Cell>{service.Price}</Table.Cell>
+                    <Table.Cell><EditModalButton pageType="Product" name={service.Name} price={service.Price} recId={service.ID} /></Table.Cell>
+                    <Table.Cell><DeleteModalButton pageType="Product" recId={service.ID} /></Table.Cell>
                 </Table.Row>
             )
         }
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Customer" />
+                <ModalButton pageType="Product" />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Name</Table.HeaderCell>
-                            <Table.HeaderCell>Address</Table.HeaderCell>
+                            <Table.HeaderCell>Price</Table.HeaderCell>
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                         </Table.Row>
@@ -97,4 +96,4 @@ class Customers extends React.Component {
 /*ReactDOM.render(
     <ReactAJAX />,
     document.getElementById('dvMessage')
-);*/ 
+); */

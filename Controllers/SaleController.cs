@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
-using System.Xml.Linq;
 using IC_MVP_Project_Task1.DAL;
 using IC_MVP_Project_Task1.Models;
 
@@ -22,9 +20,36 @@ namespace IC_MVP_Project_Task1.Controllers
 
             for (int i = 0; i < db.Sales.ToList().Count(); i++)
             {
+                Customer sc = db.Customers.Find(db.Sales.ToList()[i].CustomerID);
+
+                Customer cust = new Customer
+                {
+                    ID =  sc.ID,
+                    Name = sc.Name
+                };
+
+                Store ss = db.Stores.Find(db.Sales.ToList()[i].StoreID);
+
+                Store store = new Store
+                {
+                    ID = ss.ID,
+                    Name = ss.Name
+                };
+
+                Product pc = db.Products.Find(db.Sales.ToList()[i].ProductID);
+
+                Product prod = new Product
+                {
+                    ID = pc.ID,
+                    Name = pc.Name
+                };
+
                 dataSourceList.Add(new Sale
                 {
-                    ID = db.Customers.ToList()[i].ID,
+                    ID = db.Sales.ToList()[i].ID,
+                    Customer = cust,
+                    Store = store,
+                    Product = prod,
                     CustomerID = db.Sales.ToList()[i].CustomerID,
                     StoreID = db.Sales.ToList()[i].StoreID,
                     ProductID = db.Sales.ToList()[i].ProductID,
