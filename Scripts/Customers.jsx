@@ -30,13 +30,10 @@ class Customers extends React.Component {
         if (request != null) {
 
             request.open("GET", "/Customer/Index", false);
-            //var params = "{name: '" + this.state.Name + "'}";
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
                 if (request.readyState == 4 && request.status == 200) {
-                    console.log(request.responseText);
                     const obj = JSON.parse(request.responseText);
-                    console.log(obj);
                     this.setState({ serviceList: obj });
                 }
             }.bind(this);
@@ -46,7 +43,6 @@ class Customers extends React.Component {
    
     render() {
         let serviceList = this.state.serviceList;
-        console.log("inside load 3");
         let tableData = null;
 
         if (serviceList != "") {
@@ -54,15 +50,15 @@ class Customers extends React.Component {
                 <Table.Row key={service.ID}>
                     <Table.Cell>{service.Name}</Table.Cell>
                     <Table.Cell>{service.Address}</Table.Cell>
-                    <Table.Cell><EditModalButton custId={service.ID}/></Table.Cell>
-                    <Table.Cell><DeleteModalButton custId={service.ID} /></Table.Cell>
+                    <Table.Cell><EditModalButton pageType="Customer" name={service.Name} address={service.Address} custId={service.ID}/></Table.Cell>
+                    <Table.Cell><DeleteModalButton pageType="Customer" custId={service.ID} /></Table.Cell>
                 </Table.Row>
             )
         }
 
         return (
-            <React.Fragment>                
-                <ModalButton />
+            <React.Fragment>
+                <ModalButton pageType="Customer" />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>

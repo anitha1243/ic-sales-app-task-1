@@ -1,8 +1,7 @@
-﻿//const { Header, Image, Modal, Label, Input } = semanticUIReact
-function EditModalButton(props) {
+﻿function EditModalButton(props) {
     const [open, setOpen] = React.useState(false);
-    const [name, setName] = React.useState("");
-    const [address, setAddress] = React.useState("");
+    const [name, setName] = React.useState(props.name);
+    const [address, setAddress] = React.useState(props.address);
 
     function saveRecord() {
         setOpen(false)
@@ -17,14 +16,15 @@ function EditModalButton(props) {
         }
         if (request != null) {
 
-            request.open("POST", "/Customer/EditCustomer", false);
+            request.open("POST", "/" + props.pageType + "/Edit" + props.pageType, false);
             var params = "{ID: " + props.custId + ", Name: '" + name + "', Address: '" + address + "'}";
-            console.log(params);
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
                 if (request.readyState == 4 && request.status == 200) {
                     var response = JSON.parse(request.responseText);
-                    console.log(response);
+                    if (response === 200) {
+                        console.log("Successfully edited record");
+                    }  
                 }
             }.bind(this);
             request.send(params);
@@ -44,11 +44,11 @@ function EditModalButton(props) {
                 <Modal.Description>
                     <div>
                         <Label>NAME</Label>
-                        <Input onChange={event => setName(event.target.value)} />
+                        <Input onChange={event => setName(event.target.value)} value={name}  />
                     </div>
-                    {props.custId ==0 && <div>
+                    {props.pageType == 'Customer' && <div>
                         <Label>ADDRESS</Label>
-                        <Input onChange={event => setAddress(event.target.value)} />
+                        <Input value={address} onChange={event => setAddress(event.target.value)} />
                     </div>}                  
                     
                 </Modal.Description>

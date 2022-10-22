@@ -34,21 +34,6 @@ namespace IC_MVP_Project_Task1.Controllers
             return Json(dataSource, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Customer/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer);
-        }
-
         // GET: Customer/Create
         public ActionResult Create()
         {
@@ -69,21 +54,6 @@ namespace IC_MVP_Project_Task1.Controllers
             db.Customers.Add(customer);
             db.SaveChanges();
             return Json(customer);
-        }
-
-        // GET: Customer/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer);
         }
 
         // POST: Customer/Edit/5
@@ -112,25 +82,6 @@ namespace IC_MVP_Project_Task1.Controllers
             return 200;
         }
 
-        // GET: Customer/Delete/5
-        public ActionResult Delete(int? id, bool? saveChangesError = false)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (saveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
-            }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer);
-        }
-
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public JsonResult DeleteCustomer(int id)
@@ -139,15 +90,6 @@ namespace IC_MVP_Project_Task1.Controllers
             db.Customers.Remove(customer);
             db.SaveChanges();
             return Json(customer);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

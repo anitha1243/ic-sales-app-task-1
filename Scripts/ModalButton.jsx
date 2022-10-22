@@ -1,5 +1,5 @@
 ﻿const { Button, Header, Image, Modal, Label, Input } = semanticUIReact
-function ModalButton() {
+function ModalButton(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState("");
     const [address, setAddress] = React.useState("");
@@ -17,13 +17,15 @@ function ModalButton() {
         }
         if (request != null) {
 
-            request.open("POST", "/Customer/CreateCustomer", false);
-            var params = "{name: '" + name + "', address: '" + address + "'}";
+            request.open("POST", "/" + props.pageType + "/Create" + props.pageType, false);
+            var params = props.pageType === 'Customer' ? "{name: '" + name + "', address: '" + address + "'}" :
+                props.pageType === 'Product' ? "{name: '" + name + "', price: '" + price + "'}" : "";
             console.log(params);
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
                 if (request.readyState == 4 && request.status == 200) {
                     var response = JSON.parse(request.responseText);
+                    console.log("Record added result: " + response);                   
                 }
             }.bind(this);
             request.send(params);
@@ -35,9 +37,9 @@ function ModalButton() {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
-            trigger={<Button>New Customer</Button>}
+            trigger={<Button>New {props.pageType}</Button>}
         >
-            <Modal.Header>Create Customer</Modal.Header>
+            <Modal.Header>Create {props.pageType}</Modal.Header>
             <Modal.Content image>
                 
                 <Modal.Description>
@@ -45,10 +47,10 @@ function ModalButton() {
                         <Label>NAME</Label>
                         <Input onChange={event => setName(event.target.value)} />
                     </div>
-                    <div>
+                    {props.pageType === 'Customer' && <div>
                         <Label>ADDRESS</Label>
                         <Input onChange={event => setAddress(event.target.value)} />
-                    </div>                   
+                    </div>}                  
                     
                 </Modal.Description>
             </Modal.Content>
@@ -67,5 +69,3 @@ function ModalButton() {
         </Modal>
     )
 }
-
-//export default ModalButton
