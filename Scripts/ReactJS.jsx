@@ -5,7 +5,7 @@ class ReactAJAX extends React.Component {
         super(props);
         this.state = {
             customers: [],
-            storesList: [],
+            stores: [],
             products: [],
             panes: [
                 {
@@ -22,11 +22,11 @@ class ReactAJAX extends React.Component {
                 },
                 {
                     menuItem: 'Stores',
-                    render: () => <Tab.Pane attached={false}><Stores stores={this.state.storesList} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Stores stores={this.state.stores} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Sales',
-                    render: () => <Tab.Pane attached={false}><Sales customers={this.state.customers} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Sales customers={this.state.customers} products={this.state.products} stores={this.state.stores} /></Tab.Pane>,
                 }
             ]
         };
@@ -111,8 +111,8 @@ class ReactAJAX extends React.Component {
                 if (request.readyState == 4 && request.status == 200) {
                     const obj = JSON.parse(request.responseText);
                     console.log(obj);
-                    this.setState({ storesList: obj });
-                    console.log(this.state.storesList);
+                    this.setState({ stores: obj });
+                    console.log(this.state.stores);
                 }
             }.bind(this);
             request.send();

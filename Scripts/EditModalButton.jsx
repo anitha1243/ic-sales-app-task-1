@@ -5,6 +5,33 @@ function EditModalButton(props) {
     const [address, setAddress] = React.useState(props.address);
     const [price, setPrice] = React.useState(props.price);
     const [dateSold, setDateSold] = React.useState(props.DateSold);
+    const [custId, setCustId] = React.useState(props.CustomerID);
+    const [storeId, setStoreId] = React.useState(props.StoreID);
+    const [prodId, setProdId] = React.useState(props.ProductID);
+    const [custName, setCustName] = React.useState(props.CustomerName);
+    const [storeName, setStoreName] = React.useState(props.StoreName);
+    const [prodName, setProdName] = React.useState(props.ProductName);
+    let customersList = props.customers && props.customers.map(cust => {
+        return {
+            key: cust.ID,
+            value: cust.Name,
+            text: cust.Name
+        }
+    });
+    let productsList = props.products && props.products.map(prod => {
+        return {
+            key: prod.ID,
+            value: prod.Name,
+            text: prod.Name
+        }
+    });
+    let storesList = props.stores && props.stores.map(store => {
+        return {
+            key: store.ID,
+            value: store.Name,
+            text: store.Name
+        }
+    });
 
     function saveRecord() {
         setOpen(false)
@@ -22,7 +49,8 @@ function EditModalButton(props) {
             request.open("POST", "/" + props.pageType + "/Edit" + props.pageType, false);
             var params = props.pageType === 'Customer' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" :
                 props.pageType === 'Product' ? "{ID: " + props.recId + ", Name: '" + name + "', Price: '" + price + "'}" :
-                    props.pageType === 'Store' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" : "";
+                    props.pageType === 'Store' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" : 
+                        props.pageType === 'Sale' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" : "";
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
                 if (request.readyState == 4 && request.status == 200) {
@@ -47,10 +75,11 @@ function EditModalButton(props) {
             <Modal.Content image>
                 
                 <Modal.Description>
-                    <div>
-                        <Label>NAME</Label>
-                        <Input onChange={event => setName(event.target.value)} value={name}  />
-                    </div>
+                    {props.pageType != 'Sale' &&
+                        <div>
+                            <Label>NAME</Label>
+                            <Input onChange={event => setName(event.target.value)} value={name} />
+                        </div>}
                     {(props.pageType == 'Customer' || props.pageType == 'Store') && <div>
                         <Label>ADDRESS</Label>
                         <Input value={address} onChange={event => setAddress(event.target.value)} />
@@ -59,7 +88,6 @@ function EditModalButton(props) {
                         <Label>PRICE</Label>
                         <Input value={price} onChange={event => setPrice(event.target.value)} />
                     </div>}
-                    <Select placeholder='Select your country' options={[]} />
                     {props.pageType == 'Sale' && 
                         <>
                         <div>
@@ -68,15 +96,15 @@ function EditModalButton(props) {
                         </div>
                         <div>
                             <Label>STORE ID</Label>
-                            <Select options={[]} />
+                            <Select value={storeName} onChange={event => setStoreName(event.target.value)} options={storesList} />
                         </div>
                         <div>
                             <Label>CUSTOMER ID</Label>
-                            <Select options={[]} />
+                            <Select value={custName} onChange={event => setCustName(event.target.value)} options={customersList} />
                         </div>
                         <div>
                             <Label>PRODUCT ID</Label>
-                            <Select options={[]} />
+                            <Select value={prodName} onChange={event => setProdName(event.target.value)} options={productsList} />
                         </div>
                         </>
                      }
