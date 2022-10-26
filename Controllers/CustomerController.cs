@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -52,7 +53,15 @@ namespace IC_MVP_Project_Task1.Controllers
                 Address = address
             };
             db.Customers.Add(customer);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                return Json(e.Message);
+            }
+            
             return Json(customer);
         }
 

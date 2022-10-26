@@ -54,8 +54,8 @@
                     <Table.Cell>{service.Customer.Name}</Table.Cell>
                     <Table.Cell>{service.Store.Name}</Table.Cell>
                     <Table.Cell>{service.Product.Name}</Table.Cell>
-                    <Table.Cell>{service.DateSold}</Table.Cell>
-                    <Table.Cell><EditModalButton pageType="Sale" CustomerID={service.CustomerID} StoreID={service.StoreID} ProductID={service.ProductID} DateSold={service.DateSold} recId={service.ID}
+                    <Table.Cell>{moment(service.DateSold).format('DD/MM/YYYY')}</Table.Cell>
+                    <Table.Cell><EditModalButton pageType="Sale" CustomerID={service.CustomerID} StoreID={service.StoreID} ProductID={service.ProductID} DateSold={service.DateSold} recId={service.ID} DateSold={service.DateSold}
                         customers={this.props.customers} products={this.props.products} stores={this.props.stores} CustomerName={service.Customer.Name} StoreName={service.Store.Name} ProductName={service.Product.Name} /></Table.Cell>
                     <Table.Cell><DeleteModalButton pageType="Sale" recId={service.ID} /></Table.Cell>
                 </Table.Row>
@@ -64,7 +64,7 @@
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Sale" />
+                <ModalButton pageType="Sale" customers={this.props.customers} products={this.props.products} stores={this.props.stores} />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>

@@ -174,9 +174,16 @@
     <Compile Include="Migrations\202210121226262_InitialCreate.designer.cs">
       <DependentUpon>202210121226262_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202210261209049_AddColumnUser.cs" />
+    <Compile Include="Migrations\202210261209049_AddColumnUser.designer.cs">
+      <DependentUpon>202210261209049_AddColumnUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202210261246413_AddColumnUser1.cs" />
+    <Compile Include="Migrations\202210261246413_AddColumnUser1.designer.cs">
+      <DependentUpon>202210261246413_AddColumnUser1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Sale.cs" />
     <Compile Include="Models\Store.cs" />
@@ -204,6 +211,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202210121226262_InitialCreate.resx">
       <DependentUpon>202210121226262_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202210261209049_AddColumnUser.resx">
+      <DependentUpon>202210261209049_AddColumnUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202210261246413_AddColumnUser1.resx">
+      <DependentUpon>202210261246413_AddColumnUser1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

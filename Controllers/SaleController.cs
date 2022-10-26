@@ -85,34 +85,34 @@ namespace IC_MVP_Project_Task1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public int EditSale(int ID, int customerID, int storeID, int productID, DateTime dateSold)
+        public int EditSale(int ID, int customerID, int storeID, int productID, DateTime DateSold)
         {
-            var customerIDParam = new SqlParameter("@CustomerID", System.Data.SqlDbType.Int)
+            var CustomerID = new SqlParameter("@customerID", System.Data.SqlDbType.Int)
             {
                 Value = customerID
             };
 
-            var storeIDParam = new SqlParameter("@StoreID", System.Data.SqlDbType.Int)
+            var StoreID = new SqlParameter("@storeID", System.Data.SqlDbType.Int)
             {
                 Value = storeID
             };
 
-            var productIDParam = new SqlParameter("@ProductID", System.Data.SqlDbType.Int)
+            var ProductID = new SqlParameter("@productID", System.Data.SqlDbType.Int)
             {
                 Value = productID
             };
 
-            var dateSoldParam = new SqlParameter("@DateSold", System.Data.SqlDbType.DateTime)
+            var dateSold = new SqlParameter("@DateSold", System.Data.SqlDbType.DateTime)
             {
-                Value = dateSold
+                Value = DateSold
             };
 
             var id = new SqlParameter("@id", System.Data.SqlDbType.Int)
             {
                 Value = ID
             };
-            var sql = @"Update [Customer] SET CustomerID = @customerIDParam, StoreID = @storeIDParam, ProductID = @productIDParam, DateSold = @dateSoldParam WHERE ID = @id";
-            db.Database.ExecuteSqlCommand(sql, customerIDParam, storeIDParam, productIDParam, dateSoldParam, id);
+            var sql = @"Update [Sale] SET CustomerID = @CustomerID, StoreID = @StoreID, ProductID = @ProductID, DateSold = @dateSold WHERE ID = @id";
+            db.Database.ExecuteSqlCommand(sql, CustomerID, StoreID, ProductID, dateSold, id);
             return 200;
         }
 

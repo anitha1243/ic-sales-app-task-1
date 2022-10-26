@@ -4,9 +4,37 @@ function ModalButton(props) {
     const [name, setName] = React.useState("");
     const [address, setAddress] = React.useState("");
     const [price, setPrice] = React.useState("");
+    const [dateSold, setDateSold] = React.useState(props.DateSold);
+    const [custId, setCustId] = React.useState(props.CustomerID);
+    const [storeId, setStoreId] = React.useState(props.StoreID);
+    const [prodId, setProdId] = React.useState(props.ProductID);
+    const [custName, setCustName] = React.useState(props.CustomerName);
+    const [storeName, setStoreName] = React.useState(props.StoreName);
+    const [prodName, setProdName] = React.useState(props.ProductName);
+    let customersList = props.customers && props.customers.map(cust => {
+        return {
+            key: cust.ID,
+            value: cust.Name,
+            text: cust.Name
+        }
+    });
+    let productsList = props.products && props.products.map(prod => {
+        return {
+            key: prod.ID,
+            value: prod.Name,
+            text: prod.Name
+        }
+    });
+    let storesList = props.stores && props.stores.map(store => {
+        return {
+            key: store.ID,
+            value: store.Name,
+            text: store.Name
+        }
+    });
+    const [errMsg, setErrMsg] = React.useState("");
 
     function saveRecord() {
-        setOpen(false)
         var request;
         if (window.XMLHttpRequest) {
             //New browsers.
@@ -19,17 +47,39 @@ function ModalButton(props) {
         if (request != null) {
 
             request.open("POST", "/" + props.pageType + "/Create" + props.pageType, false);
+            if (props.pageType === 'Sale') {
+                salesParams = {
+                    customerID: customersList[customersList.findIndex(function (o) {
+                        return o.value === custName
+                    })].key,
+                    storeID: storesList[storesList.findIndex(function (o) {
+                        return o.value === storeName
+                    })].key,
+                    productID: productsList[productsList.findIndex(function (o) {
+                        return o.value === prodName
+                    })].key,
+                    DateSold: dateSold
+                };
+            }
+            
             var params = props.pageType === 'Customer' ? "{name: '" + name + "', address: '" + address + "'}" :
                 props.pageType === 'Product' ? "{name: '" + name + "', price: '" + price + "'}" :
-                    props.pageType === 'Store' ? "{name: '" + name + "', address: '" + address + "'}" : "";
+                    props.pageType === 'Store' ? "{name: '" + name + "', address: '" + address + "'}" : 
+                        props.pageType === 'Sale' ? JSON.stringify(salesParams) : "";
             console.log(params);
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
-                if (request.readyState == 4 && request.status == 200) {
+                var req_resp = request.response;
+                if (req_resp.includes("Validation failed for one or more entities.")){
+                    setErrMsg("Invalid Inputs. Unable to add record!");
+                }
+                else if (request.readyState == 4 && request.status == 200) {
                     var response = JSON.parse(request.responseText);
-                    console.log("Record added result: " + response);                   
+                    console.log("Record added result: " + response);
+                    setOpen(false)
                 }
             }.bind(this);
+            console.log(request);
             request.send(params);
         }
     }
@@ -42,13 +92,13 @@ function ModalButton(props) {
             trigger={<Button>New {props.pageType}</Button>}
         >
             <Modal.Header>Create {props.pageType}</Modal.Header>
-            <Modal.Content image>
-                
+            <Modal.Content >
+                {errMsg}
                 <Modal.Description>
-                    <div>
+                    {props.pageType != 'Sale' && <div>
                         <Label>NAME</Label>
                         <Input onChange={event => setName(event.target.value)} />
-                    </div>
+                    </div>}
                     {props.pageType === 'Customer' && <div>
                         <Label>ADDRESS</Label>
                         <Input onChange={event => setAddress(event.target.value)} />
@@ -61,6 +111,30 @@ function ModalButton(props) {
                         <Label>ADDRESS</Label>
                         <Input onChange={event => setAddress(event.target.value)} />
                     </div>} 
+                    {props.pageType == 'Sale' &&
+                        <>
+                            <div>
+                                <Label>DATE SOLD</Label>
+                                <DateInput
+                                    value={dateSold}
+                                    onChange={(event, data) => setDateSold(data.value)}
+                                    dateFormat='DD/MM/YYYY'
+                                />
+                            </div>
+                            <div>
+                                <Label>STORE ID</Label>
+                                <Select value={storeName} onChange={(event, data) => setStoreName(data.value)} options={storesList} />
+                            </div>
+                            <div>
+                                <Label>CUSTOMER ID</Label>
+                                <Select value={custName} onChange={(event, data) => setCustName(data.value)} options={customersList} />
+                            </div>
+                            <div>
+                                <Label>PRODUCT ID</Label>
+                                <Select value={prodName} onChange={(event, data) => setProdName(data.value)} options={productsList} />
+                            </div>
+                        </>
+                    }
                     
                 </Modal.Description>
             </Modal.Content>

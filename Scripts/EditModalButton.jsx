@@ -1,10 +1,12 @@
 ﻿const { Select } = semanticUIReact
+const { DateInput } = SemanticUiCalendarReact;
+
 function EditModalButton(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState(props.name);
     const [address, setAddress] = React.useState(props.address);
     const [price, setPrice] = React.useState(props.price);
-    const [dateSold, setDateSold] = React.useState(props.DateSold);
+    const [dateSold, setDateSold] = React.useState(moment(props.DateSold).format('DD/MM/YYYY'));
     const [custId, setCustId] = React.useState(props.CustomerID);
     const [storeId, setStoreId] = React.useState(props.StoreID);
     const [prodId, setProdId] = React.useState(props.ProductID);
@@ -32,9 +34,10 @@ function EditModalButton(props) {
             text: store.Name
         }
     });
+    const [errMsg, setErrMsg] = React.useState("");
 
     function saveRecord() {
-        setOpen(false)
+        
         var request;
         if (window.XMLHttpRequest) {
             //New browsers.
@@ -47,16 +50,37 @@ function EditModalButton(props) {
         if (request != null) {
 
             request.open("POST", "/" + props.pageType + "/Edit" + props.pageType, false);
+            if (props.pageType === 'Sale') {
+                salesParams = {
+                    ID: props.recId,
+                    customerID: customersList[customersList.findIndex(function (o) {
+                        return o.value === custName
+                    })].key,
+                    storeID: storesList[storesList.findIndex(function (o) {
+                        return o.value === storeName
+                    })].key,
+                    productID: productsList[productsList.findIndex(function (o) {
+                        return o.value === prodName
+                    })].key,
+                    DateSold: dateSold
+                };
+            }
+            
             var params = props.pageType === 'Customer' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" :
                 props.pageType === 'Product' ? "{ID: " + props.recId + ", Name: '" + name + "', Price: '" + price + "'}" :
-                    props.pageType === 'Store' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" : 
-                        props.pageType === 'Sale' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" : "";
+                    props.pageType === 'Store' ? "{ID: " + props.recId + ", Name: '" + name + "', Address: '" + address + "'}" :
+                        props.pageType === 'Sale' ? JSON.stringify(salesParams) : "";
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
-                if (request.readyState == 4 && request.status == 200) {
+                var req_resp = request.response;
+                if (req_resp.includes("Validation failed for one or more entities.")) {
+                    setErrMsg("Invalid Inputs. Unable to add record!");
+                }
+                else if (request.readyState == 4 && request.status == 200) {
                     var response = JSON.parse(request.responseText);
                     if (response === 200) {
                         console.log("Successfully edited record");
+                        setOpen(false);
                     }  
                 }
             }.bind(this);
@@ -72,7 +96,8 @@ function EditModalButton(props) {
             trigger={<Button>Edit {props.pageType}</Button>}
         >
             <Modal.Header>Edit {props.pageType}</Modal.Header>
-            <Modal.Content image>
+            <Modal.Content >
+                {errMsg}
                 
                 <Modal.Description>
                     {props.pageType != 'Sale' &&
@@ -92,19 +117,23 @@ function EditModalButton(props) {
                         <>
                         <div>
                             <Label>DATE SOLD</Label>
-                            <Input value={dateSold} onChange={event => setDateSold(event.target.value)} />
+                            <DateInput
+                                value={dateSold}
+                                onChange={(event, data) => setDateSold(data.value)}
+                                dateFormat='DD/MM/YYYY'
+                            />
                         </div>
                         <div>
                             <Label>STORE ID</Label>
-                            <Select value={storeName} onChange={event => setStoreName(event.target.value)} options={storesList} />
+                            <Select value={storeName} onChange={(event, data) => setStoreName(data.value)} options={storesList} />
                         </div>
                         <div>
                             <Label>CUSTOMER ID</Label>
-                            <Select value={custName} onChange={event => setCustName(event.target.value)} options={customersList} />
+                            <Select value={custName} onChange={(event, data) => setCustName(data.value)} options={customersList} />
                         </div>
                         <div>
                             <Label>PRODUCT ID</Label>
-                            <Select value={prodName} onChange={event => setProdName(event.target.value)} options={productsList} />
+                            <Select value={prodName} onChange={(event, data) => setProdName(data.value)} options={productsList} />
                         </div>
                         </>
                      }

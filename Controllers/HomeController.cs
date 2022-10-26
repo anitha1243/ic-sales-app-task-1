@@ -26,12 +26,5 @@ namespace Call_Controller_ReactJS_MVC.Controllers
             };
             return Json(person);
         }
-
-        [HttpGet]
-        public string AjaxMethod1()
-        {
-            
-            return "hello";
-        }
     }
 }
