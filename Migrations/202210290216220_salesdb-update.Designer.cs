@@ -7,13 +7,13 @@ namespace Call_Controller_ReactJS_MVC.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class AddColumnUser : IMigrationMetadata
+    public sealed partial class salesdbupdate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddColumnUser));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(salesdbupdate));
         
         string IMigrationMetadata.Id
         {
-            get { return "202210261209049_AddColumnUser"; }
+            get { return "202210290216220_salesdb-update"; }
         }
         
         string IMigrationMetadata.Source

@@ -5,9 +5,6 @@ function ModalButton(props) {
     const [address, setAddress] = React.useState("");
     const [price, setPrice] = React.useState("");
     const [dateSold, setDateSold] = React.useState(props.DateSold);
-    const [custId, setCustId] = React.useState(props.CustomerID);
-    const [storeId, setStoreId] = React.useState(props.StoreID);
-    const [prodId, setProdId] = React.useState(props.ProductID);
     const [custName, setCustName] = React.useState(props.CustomerName);
     const [storeName, setStoreName] = React.useState(props.StoreName);
     const [prodName, setProdName] = React.useState(props.ProductName);
@@ -76,10 +73,10 @@ function ModalButton(props) {
                 else if (request.readyState == 4 && request.status == 200) {
                     var response = JSON.parse(request.responseText);
                     console.log("Record added result: " + response);
-                    setOpen(false)
+                    setOpen(false);
+                    props.updateRec("Success");
                 }
-            }.bind(this);
-            console.log(request);
+            }.bind(this);;
             request.send(params);
         }
     }
@@ -89,7 +86,7 @@ function ModalButton(props) {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
-            trigger={<Button>New {props.pageType}</Button>}
+            trigger={<Button color='blue'>New {props.pageType}</Button>}
         >
             <Modal.Header>Create {props.pageType}</Modal.Header>
             <Modal.Content >

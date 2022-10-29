@@ -1,11 +1,10 @@
-﻿const { Icon, Menu, Table } = semanticUIReact
-class Customers extends React.Component {
+﻿class Stores extends React.Component {
     constructor(props) {
         super(props);
-    }
-    
+    }   
+   
     render() {
-        let serviceList = this.props.customers;
+        let serviceList = this.props.stores;
         let tableData = null;
 
         if (serviceList != "") {
@@ -13,15 +12,15 @@ class Customers extends React.Component {
                 <Table.Row key={service.ID}>
                     <Table.Cell>{service.Name}</Table.Cell>
                     <Table.Cell>{service.Address}</Table.Cell>
-                    <Table.Cell><EditModalButton pageType="Customer" name={service.Name} address={service.Address} recId={service.ID}/></Table.Cell>
-                    <Table.Cell><DeleteModalButton pageType="Customer" recId={service.ID} /></Table.Cell>
+                    <Table.Cell><EditModalButton pageType="Store" name={service.Name} address={service.Address} recId={service.ID} /></Table.Cell>
+                    <Table.Cell><DeleteModalButton pageType="Store" recId={service.ID} /></Table.Cell>
                 </Table.Row>
             )
         }
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Customer" updateRec={this.props.updateRec} />
+                <ModalButton pageType="Store" />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
@@ -60,3 +59,8 @@ class Customers extends React.Component {
         );
     }
 }
+
+/*ReactDOM.render(
+    <ReactAJAX />,
+    document.getElementById('dvMessage')
+); */

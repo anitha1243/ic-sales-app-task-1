@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class salesdbupdate : DbMigration
     {
         public override void Up()
         {
@@ -12,8 +12,8 @@
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        Address = c.String(),
+                        Name = c.String(nullable: false),
+                        Address = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -40,7 +40,7 @@
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
+                        Name = c.String(nullable: false),
                         Price = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
@@ -50,8 +50,8 @@
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        Address = c.String(),
+                        Name = c.String(nullable: false),
+                        Address = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
             

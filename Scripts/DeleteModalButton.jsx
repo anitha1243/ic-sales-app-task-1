@@ -32,7 +32,7 @@
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
-            trigger={<Button>Delete {props.pageType}</Button>}
+            trigger={<Button color='red'>Delete {props.pageType}</Button>}
         >
             <Modal.Header>Delete {props.pageType}</Modal.Header>
             <Modal.Content image>

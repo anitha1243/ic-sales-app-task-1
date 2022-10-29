@@ -7,9 +7,6 @@ function EditModalButton(props) {
     const [address, setAddress] = React.useState(props.address);
     const [price, setPrice] = React.useState(props.price);
     const [dateSold, setDateSold] = React.useState(moment(props.DateSold).format('DD/MM/YYYY'));
-    const [custId, setCustId] = React.useState(props.CustomerID);
-    const [storeId, setStoreId] = React.useState(props.StoreID);
-    const [prodId, setProdId] = React.useState(props.ProductID);
     const [custName, setCustName] = React.useState(props.CustomerName);
     const [storeName, setStoreName] = React.useState(props.StoreName);
     const [prodName, setProdName] = React.useState(props.ProductName);
@@ -93,7 +90,7 @@ function EditModalButton(props) {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
-            trigger={<Button>Edit {props.pageType}</Button>}
+            trigger={<Button color='yellow'>Edit {props.pageType}</Button>}
         >
             <Modal.Header>Edit {props.pageType}</Modal.Header>
             <Modal.Content >
