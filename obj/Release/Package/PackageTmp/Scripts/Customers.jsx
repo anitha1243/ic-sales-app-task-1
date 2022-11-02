@@ -2,6 +2,15 @@
 class Customers extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            recChange: '',
+        }
+
+        this.updateRec = this.updateRec.bind(this);
+    }
+
+    updateRec(rec) {
+        this.setState({ recChange: rec })
     }
     
     render() {
@@ -21,7 +30,7 @@ class Customers extends React.Component {
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Customer" updateRec={this.props.updateRec} />
+                <ModalButton pageType="Customer" loadCustomerData={this.loadCustomerData} updateRec={this.updateRec} />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>

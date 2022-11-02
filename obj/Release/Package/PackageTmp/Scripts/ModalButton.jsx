@@ -72,11 +72,13 @@ function ModalButton(props) {
                 }
                 else if (request.readyState == 4 && request.status == 200) {
                     var response = JSON.parse(request.responseText);
-                    console.log("Record added result: " + response);
+                    console.log("Record added");
                     setOpen(false);
-                    props.updateRec("Success");
+                    props.loadCustomerData;
+                    props.updateRec('Rec updated');
+                    console.log(props.customers);
                 }
-            }.bind(this);;
+            }.bind(this);
             request.send(params);
         }
     }

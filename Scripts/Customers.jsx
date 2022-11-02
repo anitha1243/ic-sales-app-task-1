@@ -1,11 +1,32 @@
-﻿const { Icon, Menu, Table } = semanticUIReact
+﻿const { Icon, Menu, Table, Pagination } = semanticUIReact
 class Customers extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            customers: this.props.customers.slice(0, 5),
+            begin: 0,
+            end: 5,
+            activePage: 1,
+            pageCount: Math.ceil(this.props.customers.length / 5)
+        }
+
+        this.btnClick = this.btnClick.bind(this);
+    }
+
+    async btnClick(
+        event,
+        data
+    ) {
+        await this.setState({ activePage: data.activePage });
+        await this.setState({ begin: this.state.activePage * 5 - 5 });
+        await this.setState({ end: this.state.activePage * 5 });
+        await this.setState({
+            customers: this.props.customers.slice(this.state.begin, this.state.end),
+        });
     }
     
     render() {
-        let serviceList = this.props.customers;
+        let serviceList = this.state.customers;
         let tableData = null;
 
         if (serviceList != "") {
@@ -21,7 +42,7 @@ class Customers extends React.Component {
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Customer" updateRec={this.props.updateRec} />
+                <ModalButton pageType="Customer" />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
@@ -36,24 +57,11 @@ class Customers extends React.Component {
                         {tableData}
                     </Table.Body>
 
-                    <Table.Footer>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan='3'>
-                                <Menu floated='right' pagination>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron left' />
-                                    </Menu.Item>
-                                    <Menu.Item as='a'>1</Menu.Item>
-                                    <Menu.Item as='a'>2</Menu.Item>
-                                    <Menu.Item as='a'>3</Menu.Item>
-                                    <Menu.Item as='a'>4</Menu.Item>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron right' />
-                                    </Menu.Item>
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Footer>
+                    <Pagination
+                        defaultActivePage={1}
+                        totalPages={this.state.pageCount}
+                        onPageChange={this.btnClick}
+                    />
                 </Table>
             </React.Fragment>
 

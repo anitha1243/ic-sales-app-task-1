@@ -4,18 +4,17 @@ class ReactAJAX extends React.Component {
         
         super(props);
         this.state = {
-            recChange: "",
             customers: [],
             stores: [],
             products: [],
             panes: [
                 {
                     menuItem: 'React',
-                    render: () => <Tab.Pane attached={false}><Customers customers={this.state.customers} updateRec={this.updateRec} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Customers customers={this.state.customers} loadCustomerData={this.loadCustomerData} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Customers',
-                    render: () => <Tab.Pane attached={false}><Customers customers={this.state.customers} updateRec={this.updateRec} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false}><Customers customers={this.state.customers} loadCustomerData={this.loadCustomerData} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Products',
@@ -35,17 +34,12 @@ class ReactAJAX extends React.Component {
         this.loadCustomerData = this.loadCustomerData.bind(this);
         this.loadProductData = this.loadProductData.bind(this);
         this.loadStoreData = this.loadStoreData.bind(this);
-        this.updateRec = this.updateRec.bind(this);
     }
 
     componentDidMount() {
         this.loadCustomerData();
         this.loadProductData();
         this.loadStoreData();
-    }
-
-    updateRec(rec) {
-        this.setState({ recChange: rec });
     }
 
     loadCustomerData() {
@@ -118,7 +112,6 @@ class ReactAJAX extends React.Component {
                     const obj = JSON.parse(request.responseText);
                     console.log(obj);
                     this.setState({ stores: obj });
-                    console.log(this.state.stores);
                 }
             }.bind(this);
             request.send();

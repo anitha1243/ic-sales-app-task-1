@@ -2,11 +2,16 @@
     constructor(props) {
         super(props);
         this.state = {
-            serviceList: []
+            serviceList: [],
+            begin: 0,
+            end: 5,
+            activePage: 1            
         };
 
         this.loadData = this.loadData.bind(this);
+        this.btnClick = this.btnClick.bind(this);
     }
+
     componentDidMount() {
         this.loadData();
     }
@@ -36,9 +41,21 @@
             request.send();
         }
     }
+
+    async btnClick(
+        event,
+        data
+    ) {
+        await this.setState({ activePage: data.activePage });
+        await this.setState({ begin: this.state.activePage * 5 - 5 });
+        await this.setState({ end: this.state.activePage * 5 });
+        await this.setState({
+            serviceList: this.props.serviceList.slice(this.state.begin, this.state.end),
+        });
+    }
    
     render() {
-        let serviceList = this.state.serviceList;
+        let serviceList = this.state.serviceList.slice(0, 5);
         let tableData = null;
 
         if (serviceList != "") {
@@ -72,26 +89,13 @@
 
                     <Table.Body>
                         {tableData}
-                    </Table.Body>
+                    </Table.Body>                    
 
-                    <Table.Footer>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan='3'>
-                                <Menu floated='right' pagination>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron left' />
-                                    </Menu.Item>
-                                    <Menu.Item as='a'>1</Menu.Item>
-                                    <Menu.Item as='a'>2</Menu.Item>
-                                    <Menu.Item as='a'>3</Menu.Item>
-                                    <Menu.Item as='a'>4</Menu.Item>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron right' />
-                                    </Menu.Item>
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Footer>
+                    <Pagination
+                        defaultActivePage={1}
+                        totalPages={Math.ceil(this.state.serviceList.length / 5)}
+                        onPageChange={this.btnClick}
+                    />
                 </Table>
             </React.Fragment>
 
