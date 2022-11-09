@@ -1,10 +1,41 @@
 ﻿class Stores extends React.Component {
     constructor(props) {
         super(props);
-    }   
+        this.state = {
+            stores: this.props.stores.slice(0, 5),
+            begin: 0,
+            end: 5,
+            activePage: 1,
+            pageCount: Math.ceil(this.props.stores.length / 5)
+        }
+
+        this.btnClick = this.btnClick.bind(this);
+    }  
+
+    componentDidMount() {
+        this.props.pageType(sessionStorage.getItem('activeIndex'));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            stores: nextProps.stores.slice(this.state.begin, this.state.end)
+        })
+    }
+
+    async btnClick(
+        event,
+        data
+    ) {
+        await this.setState({ activePage: data.activePage });
+        await this.setState({ begin: this.state.activePage * 5 - 5 });
+        await this.setState({ end: this.state.activePage * 5 });
+        await this.setState({
+            stores: this.props.stores.slice(this.state.begin, this.state.end),
+        });
+    }
    
     render() {
-        let serviceList = this.props.stores;
+        let serviceList = this.state.stores;
         let tableData = null;
 
         if (serviceList != "") {
@@ -12,15 +43,15 @@
                 <Table.Row key={service.ID}>
                     <Table.Cell>{service.Name}</Table.Cell>
                     <Table.Cell>{service.Address}</Table.Cell>
-                    <Table.Cell><EditModalButton pageType="Store" name={service.Name} address={service.Address} recId={service.ID} /></Table.Cell>
-                    <Table.Cell><DeleteModalButton pageType="Store" recId={service.ID} /></Table.Cell>
+                    <Table.Cell><EditModalButton pageType="Store" name={service.Name} address={service.Address} recId={service.ID} loadStores={this.props.loadStores} /></Table.Cell>
+                    <Table.Cell><DeleteModalButton pageType="Store" recId={service.ID} loadStores={this.props.loadStores} /></Table.Cell>
                 </Table.Row>
             )
         }
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Store" />
+                <ModalButton pageType="Store" loadStores={this.props.loadStores} />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
@@ -35,24 +66,11 @@
                         {tableData}
                     </Table.Body>
 
-                    <Table.Footer>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan='3'>
-                                <Menu floated='right' pagination>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron left' />
-                                    </Menu.Item>
-                                    <Menu.Item as='a'>1</Menu.Item>
-                                    <Menu.Item as='a'>2</Menu.Item>
-                                    <Menu.Item as='a'>3</Menu.Item>
-                                    <Menu.Item as='a'>4</Menu.Item>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron right' />
-                                    </Menu.Item>
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Footer>
+                    <Pagination
+                        defaultActivePage={1}
+                        totalPages={this.state.pageCount}
+                        onPageChange={this.btnClick}
+                    />
                 </Table>
             </React.Fragment>
 

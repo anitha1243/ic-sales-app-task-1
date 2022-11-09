@@ -1,4 +1,5 @@
 ﻿const { Button, Header, Image, Modal, Label, Input } = semanticUIReact
+const { useEffect } = React
 function ModalButton(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState("");
@@ -8,6 +9,7 @@ function ModalButton(props) {
     const [custName, setCustName] = React.useState(props.CustomerName);
     const [storeName, setStoreName] = React.useState(props.StoreName);
     const [prodName, setProdName] = React.useState(props.ProductName);
+    const [recAdded, setRecAdded] = React.useState(false);
     let customersList = props.customers && props.customers.map(cust => {
         return {
             key: cust.ID,
@@ -30,6 +32,23 @@ function ModalButton(props) {
         }
     });
     const [errMsg, setErrMsg] = React.useState("");
+
+    useEffect(() => {
+        if (sessionStorage.getItem('activeIndex') == "1") {
+            props.loadCusts();
+        }
+        else if (sessionStorage.getItem('activeIndex') == "2") {
+            props.loadProds;
+        }
+        else if (sessionStorage.getItem('activeIndex') == "3") {
+            props.loadStores;
+        }
+        else if (sessionStorage.getItem('activeIndex') == "4") {
+            props.loadSales;
+        }
+        
+        setRecAdded(false);
+    }, [recAdded]);
 
     function saveRecord() {
         var request;
@@ -74,9 +93,7 @@ function ModalButton(props) {
                     var response = JSON.parse(request.responseText);
                     console.log("Record added");
                     setOpen(false);
-                    props.loadCustomerData;
-                    props.updateRec('Rec updated');
-                    console.log(props.customers);
+                    setRecAdded(true);
                 }
             }.bind(this);
             request.send(params);

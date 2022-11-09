@@ -2,13 +2,20 @@
     constructor(props) {
         super(props);
         this.state = {
-            serviceList: []
+            serviceList: [],
+            begin: 0,
+            end: 5,
+            activePage: 1,
+            serviceListUi: []
         };
 
         this.loadData = this.loadData.bind(this);
-    }
+        this.btnClick = this.btnClick.bind(this);
+    }    
+
     componentDidMount() {
         this.loadData();
+        this.props.pageType(sessionStorage.getItem('activeIndex'));
     }
 
     loadData() {
@@ -27,18 +34,29 @@
             request.open("GET", "/Sale/Index", false);
             request.setRequestHeader("Content-Type", "application/json");
             request.onload = function () {
-                console.log(request);
                 if (request.readyState == 4 && request.status == 200) {
                     const obj = JSON.parse(request.responseText);
-                    this.setState({ serviceList: obj });
+                    this.setState({ serviceList: obj, serviceListUi: obj.slice(this.state.begin, this.state.end) });
                 }
             }.bind(this);
             request.send();
         }
     }
+
+    async btnClick(
+        event,
+        data
+    ) {
+        await this.setState({ activePage: data.activePage });
+        await this.setState({ begin: this.state.activePage * 5 - 5 });
+        await this.setState({ end: this.state.activePage * 5 });
+        this.setState({
+            serviceListUi: this.state.serviceList.slice(this.state.begin, this.state.end),
+        });
+    }
    
     render() {
-        let serviceList = this.state.serviceList;
+        let serviceList = this.state.serviceListUi;
         let tableData = null;
 
         if (serviceList != "") {
@@ -49,15 +67,16 @@
                     <Table.Cell>{service.Product.Name}</Table.Cell>
                     <Table.Cell>{moment(service.DateSold).format('DD/MM/YYYY')}</Table.Cell>
                     <Table.Cell><EditModalButton pageType="Sale" CustomerID={service.CustomerID} StoreID={service.StoreID} ProductID={service.ProductID} DateSold={service.DateSold} recId={service.ID} DateSold={service.DateSold}
-                        customers={this.props.customers} products={this.props.products} stores={this.props.stores} CustomerName={service.Customer.Name} StoreName={service.Store.Name} ProductName={service.Product.Name} /></Table.Cell>
-                    <Table.Cell><DeleteModalButton pageType="Sale" recId={service.ID} /></Table.Cell>
+                        customers={this.props.customers} products={this.props.products} stores={this.props.stores} CustomerName={service.Customer.Name} StoreName={service.Store.Name} ProductName={service.Product.Name}
+                        loadSales={this.loadData}  /></Table.Cell>
+                    <Table.Cell><DeleteModalButton pageType="Sale" recId={service.ID} loadSales={this.loadData} /></Table.Cell>
                 </Table.Row>
             )
         }
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Sale" customers={this.props.customers} products={this.props.products} stores={this.props.stores} />
+                <ModalButton pageType="Sale" customers={this.props.customers} products={this.props.products} stores={this.props.stores} loadSales={this.loadData} />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
@@ -72,26 +91,13 @@
 
                     <Table.Body>
                         {tableData}
-                    </Table.Body>
+                    </Table.Body>                    
 
-                    <Table.Footer>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan='3'>
-                                <Menu floated='right' pagination>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron left' />
-                                    </Menu.Item>
-                                    <Menu.Item as='a'>1</Menu.Item>
-                                    <Menu.Item as='a'>2</Menu.Item>
-                                    <Menu.Item as='a'>3</Menu.Item>
-                                    <Menu.Item as='a'>4</Menu.Item>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron right' />
-                                    </Menu.Item>
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Footer>
+                    <Pagination
+                        defaultActivePage={1}
+                        totalPages={Math.ceil(this.state.serviceList.length / 5)}
+                        onPageChange={this.btnClick}
+                    />
                 </Table>
             </React.Fragment>
 

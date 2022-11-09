@@ -6,11 +6,42 @@
             begin: 0,
             end: 5,
             activePage: 1,
-            pageCount: Math.ceil(this.props.stores.length / 5)
+            pageCount: Math.ceil(this.props.stores.length / 5),
+            activeIndexStore: sessionStorage.getItem('activeIndex') ? sessionStorage.getItem('activeIndex') : this.props.activeIndexStore
         }
 
         this.btnClick = this.btnClick.bind(this);
-    }   
+    }  
+
+    componentDidMount() {
+        this.didMount = true;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            stores: nextProps.stores.slice(this.state.begin, this.state.end),
+            begin: 0,
+            end: 5,
+            activePage: 1,
+            pageCount: Math.ceil(nextProps.stores.length / 5),
+            activeIndexStore: nextProps.activeIndexStore
+        })
+    }
+
+    componentDidUpdate() {
+        if (this.didMount && !this.didReceiveProps) {
+            this.setState({
+                stores: this.props.stores.slice(0, 5),
+                begin: 0,
+                end: 5,
+                activePage: 1,
+                pageCount: Math.ceil(this.props.stores.length / 5),
+                activeIndexStore: this.props.activeIndexStore
+            });
+        }
+
+        this.didMount = false
+    }
 
     async btnClick(
         event,
@@ -33,15 +64,15 @@
                 <Table.Row key={service.ID}>
                     <Table.Cell>{service.Name}</Table.Cell>
                     <Table.Cell>{service.Address}</Table.Cell>
-                    <Table.Cell><EditModalButton pageType="Store" name={service.Name} address={service.Address} recId={service.ID} /></Table.Cell>
-                    <Table.Cell><DeleteModalButton pageType="Store" recId={service.ID} /></Table.Cell>
+                    <Table.Cell><EditModalButton pageType="Store" name={service.Name} address={service.Address} recId={service.ID} loadStores={this.props.loadStores} /></Table.Cell>
+                    <Table.Cell><DeleteModalButton pageType="Store" recId={service.ID} loadStores={this.props.loadStores} /></Table.Cell>
                 </Table.Row>
             )
         }
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Store" />
+                <ModalButton pageType="Store" loadStores={this.props.loadStores} activePageIndex={this.state.activeIndexStore} />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>

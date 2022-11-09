@@ -1,4 +1,5 @@
 ﻿const { Button, Header, Image, Modal, Label, Input } = semanticUIReact
+const { useEffect } = React
 function ModalButton(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState("");
@@ -8,6 +9,7 @@ function ModalButton(props) {
     const [custName, setCustName] = React.useState(props.CustomerName);
     const [storeName, setStoreName] = React.useState(props.StoreName);
     const [prodName, setProdName] = React.useState(props.ProductName);
+    const [recAdded, setRecAdded] = React.useState(false);
     let customersList = props.customers && props.customers.map(cust => {
         return {
             key: cust.ID,
@@ -30,6 +32,31 @@ function ModalButton(props) {
         }
     });
     const [errMsg, setErrMsg] = React.useState("");
+
+    useEffect(() => {
+        console.log(props.activePageIndex);
+        if (props.activePageIndex == 1 || props.activePageIndex == 0) {
+            props.loadCusts();
+            console.log('load custs');
+            console.log(props.activePageIndex);
+        }
+        else if (props.activePageIndex == 2) {
+            props.loadProds();
+        }
+        else if (props.activePageIndex == 3) {
+            props.loadStores();
+        }
+        else if (props.activePageIndex == 4) {
+            props.loadSales();
+        }
+        else if (props.activePageIndex === undefined
+            || props.activePageIndex === null) {
+            props.loadCusts();
+            console.log(props.activePageIndex);
+        }
+        
+        setRecAdded(false);
+    }, [recAdded]);
 
     function saveRecord() {
         var request;
@@ -74,6 +101,7 @@ function ModalButton(props) {
                     var response = JSON.parse(request.responseText);
                     console.log("Record added");
                     setOpen(false);
+                    setRecAdded(true);
                 }
             }.bind(this);
             request.send(params);

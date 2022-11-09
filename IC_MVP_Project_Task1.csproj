@@ -185,6 +185,10 @@
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Customer\IndexUI.cshtml" />
+    <Content Include="Views\Product\IndexUI.cshtml" />
+    <Content Include="Views\Sale\IndexUI.cshtml" />
+    <Content Include="Views\Store\IndexUI.cshtml" />
     <None Include="Properties\PublishProfiles\ic-sales-app - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ic-sales-app - FTP1.pubxml" />
     <None Include="Properties\PublishProfiles\ic-sales-app - FTP2.pubxml" />

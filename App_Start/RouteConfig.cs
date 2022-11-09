@@ -18,6 +18,30 @@ namespace Call_Controller_ReactJS_MVC
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Customer",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Customer", action = "IndexUI", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "Sale",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Sale", action = "IndexUI", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "Product",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Product", action = "IndexUI", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "Store",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Store", action = "IndexUI", id = UrlParameter.Optional }
+            );
         }
     }
 }

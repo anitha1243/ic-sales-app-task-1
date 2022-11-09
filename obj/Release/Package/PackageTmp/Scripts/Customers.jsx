@@ -1,20 +1,50 @@
-﻿const { Icon, Menu, Table } = semanticUIReact
+﻿const { Icon, Menu, Table, Pagination } = semanticUIReact
 class Customers extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            recChange: '',
+            customers: this.props.customers.slice(0, 5),
+            begin: 0,
+            end: 5,
+            activePage: 1,
+            pageCount: Math.ceil(this.props.customers.length / 5),
+            custUp: ""
         }
 
-        this.updateRec = this.updateRec.bind(this);
+        this.btnClick = this.btnClick.bind(this);
+        this.updateCust = this.updateCust.bind(this);
     }
 
-    updateRec(rec) {
-        this.setState({ recChange: rec })
+    componentDidMount() {
+        this.props.pageType(sessionStorage.getItem('activeIndex'));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            customers: nextProps.customers.slice(this.state.begin, this.state.end)
+        })
+    }
+
+    updateCust(custUpdate) {
+        this.setState({
+            custUp: custUpdate
+        })
+    }
+
+    async btnClick(
+        event,
+        data
+    ) {
+        await this.setState({ activePage: data.activePage });
+        await this.setState({ begin: this.state.activePage * 5 - 5 });
+        await this.setState({ end: this.state.activePage * 5 });
+        await this.setState({
+            customers: this.props.customers.slice(this.state.begin, this.state.end),
+        });
     }
     
     render() {
-        let serviceList = this.props.customers;
+        let serviceList = this.state.customers;
         let tableData = null;
 
         if (serviceList != "") {
@@ -22,15 +52,15 @@ class Customers extends React.Component {
                 <Table.Row key={service.ID}>
                     <Table.Cell>{service.Name}</Table.Cell>
                     <Table.Cell>{service.Address}</Table.Cell>
-                    <Table.Cell><EditModalButton pageType="Customer" name={service.Name} address={service.Address} recId={service.ID}/></Table.Cell>
-                    <Table.Cell><DeleteModalButton pageType="Customer" recId={service.ID} /></Table.Cell>
+                    <Table.Cell><EditModalButton pageType="Customer" name={service.Name} address={service.Address} recId={service.ID} loadCusts={this.props.loadCusts} /></Table.Cell>
+                    <Table.Cell><DeleteModalButton pageType="Customer" recId={service.ID} loadCusts={this.props.loadCusts} /></Table.Cell>
                 </Table.Row>
             )
         }
 
         return (
             <React.Fragment>
-                <ModalButton pageType="Customer" loadCustomerData={this.loadCustomerData} updateRec={this.updateRec} />
+                <ModalButton pageType="Customer" loadCusts={this.props.loadCusts} />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
@@ -45,24 +75,11 @@ class Customers extends React.Component {
                         {tableData}
                     </Table.Body>
 
-                    <Table.Footer>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan='3'>
-                                <Menu floated='right' pagination>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron left' />
-                                    </Menu.Item>
-                                    <Menu.Item as='a'>1</Menu.Item>
-                                    <Menu.Item as='a'>2</Menu.Item>
-                                    <Menu.Item as='a'>3</Menu.Item>
-                                    <Menu.Item as='a'>4</Menu.Item>
-                                    <Menu.Item as='a' icon>
-                                        <Icon name='chevron right' />
-                                    </Menu.Item>
-                                </Menu>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Footer>
+                    <Pagination
+                        defaultActivePage={1}
+                        totalPages={this.state.pageCount}
+                        onPageChange={this.btnClick}
+                    />
                 </Table>
             </React.Fragment>
 

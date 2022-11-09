@@ -1,5 +1,6 @@
 ﻿function DeleteModalButton(props) {
     const [open, setOpen] = React.useState(false);
+    const [recDeleted, setRecDeleted] = React.useState(false);
 
     function saveRecord() {
         setOpen(false)
@@ -21,11 +22,29 @@
                 if (request.readyState == 4 && request.status == 200) {
                     var response = JSON.parse(request.responseText);
                     console.log(response);
+                    setRecDeleted(true);
                 }
             }.bind(this);
             request.send(params);
         }
     }
+
+    useEffect(() => {
+        if (sessionStorage.getItem('activeIndex') == "1") {
+            props.loadCusts();
+        }
+        else if (sessionStorage.getItem('activeIndex') == "2") {
+            props.loadProds();
+        }
+        else if (sessionStorage.getItem('activeIndex') == "3") {
+            props.loadStores();
+        }
+        else if (sessionStorage.getItem('activeIndex') == "4") {
+            props.loadSales();
+        }
+
+        setRecDeleted(false);
+    }, [recDeleted]);
 
     return (
         <Modal

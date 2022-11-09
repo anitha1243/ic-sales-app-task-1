@@ -15,16 +15,6 @@ namespace Call_Controller_ReactJS_MVC.Controllers
         public ActionResult Index()
         {
             return View();
-        }
-
-        [HttpPost]
-        public JsonResult AjaxMethod(string name)
-        {
-            Customer person = new Customer
-            {
-                Name = name
-            };
-            return Json(person);
-        }
+        }        
     }
 }

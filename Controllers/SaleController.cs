@@ -13,6 +13,12 @@ namespace IC_MVP_Project_Task1.Controllers
         private SalesContext db = new SalesContext();
 
         // GET: Sale
+        public ActionResult IndexUI()
+        {
+            return View();
+        }
+
+        // GET: Sale
         [HttpGet]
         public JsonResult Index()
         {

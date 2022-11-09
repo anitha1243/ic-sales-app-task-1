@@ -10,6 +10,7 @@ function EditModalButton(props) {
     const [custName, setCustName] = React.useState(props.CustomerName);
     const [storeName, setStoreName] = React.useState(props.StoreName);
     const [prodName, setProdName] = React.useState(props.ProductName);
+    const [recEdited, setRecEdited] = React.useState(false);
     let customersList = props.customers && props.customers.map(cust => {
         return {
             key: cust.ID,
@@ -78,12 +79,30 @@ function EditModalButton(props) {
                     if (response === 200) {
                         console.log("Successfully edited record");
                         setOpen(false);
+                        setRecEdited(true);
                     }  
                 }
             }.bind(this);
             request.send(params);
         }
     }
+
+    useEffect(() => {
+        if (sessionStorage.getItem('activeIndex') == "1") {
+            props.loadCusts();
+        }
+        else if (sessionStorage.getItem('activeIndex') == "2") {
+            props.loadProds();
+        }
+        else if (sessionStorage.getItem('activeIndex') == "3") {
+            props.loadStores();
+        }
+        else if (sessionStorage.getItem('activeIndex') == "4") {
+            props.loadSales();
+        }
+
+        setRecEdited(false);
+    }, [recEdited]);
 
     return (
         <Modal

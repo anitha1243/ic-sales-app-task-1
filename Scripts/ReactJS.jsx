@@ -1,32 +1,34 @@
-﻿const { Tab } = semanticUIReact
+﻿const { Tab } = semanticUIReact;
+
 class ReactAJAX extends React.Component {
     constructor(props) {
         
         super(props);
         this.state = {
+            activeIndex: document.currentScript.getAttribute('pageType'),
             customers: [],
             stores: [],
             products: [],
             panes: [
                 {
                     menuItem: 'React',
-                    render: () => <Tab.Pane attached={false}><Customers customers={this.state.customers} loadCustomerData={this.loadCustomerData} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false} ><Customers customers={this.state.customers} pageType={this.updateActiveIndex} loadCusts={this.loadCustomerData} activeIndexCust={this.state.activeIndex} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Customers',
-                    render: () => <Tab.Pane attached={false}><Customers customers={this.state.customers} loadCustomerData={this.loadCustomerData} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false} ><Customers customers={this.state.customers} pageType={this.updateActiveIndex} loadCusts={this.loadCustomerData} activeIndexCust={this.state.activeIndex} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Products',
-                    render: () => <Tab.Pane attached={false}><Products products={this.state.products} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false} ><Products products={this.state.products} pageType={this.updateActiveIndex} loadProds={this.loadProductData} activeIndexProd={this.state.activeIndex} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Stores',
-                    render: () => <Tab.Pane attached={false}><Stores stores={this.state.stores} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false} ><Stores stores={this.state.stores} pageType={this.updateActiveIndex} loadStores={this.loadStoreData} activeIndexStore={this.state.activeIndex} /></Tab.Pane>,
                 },
                 {
                     menuItem: 'Sales',
-                    render: () => <Tab.Pane attached={false}><Sales customers={this.state.customers} products={this.state.products} stores={this.state.stores} /></Tab.Pane>,
+                    render: () => <Tab.Pane attached={false} ><Sales customers={this.state.customers} products={this.state.products} stores={this.state.stores} pageType={this.updateActiveIndex} activeIndexSales={this.state.activeIndex} /></Tab.Pane>,
                 }
             ]
         };
@@ -34,12 +36,20 @@ class ReactAJAX extends React.Component {
         this.loadCustomerData = this.loadCustomerData.bind(this);
         this.loadProductData = this.loadProductData.bind(this);
         this.loadStoreData = this.loadStoreData.bind(this);
+        this.updateActiveIndex = this.updateActiveIndex.bind(this); 
     }
 
     componentDidMount() {
         this.loadCustomerData();
         this.loadProductData();
         this.loadStoreData();
+        sessionStorage.setItem('activeIndex', this.state.activeIndex);
+    }
+
+    updateActiveIndex(index) {
+        this.setState({
+            activeIndex: index
+        })
     }
 
     loadCustomerData() {
@@ -110,8 +120,8 @@ class ReactAJAX extends React.Component {
             request.onload = function () {
                 if (request.readyState == 4 && request.status == 200) {
                     const obj = JSON.parse(request.responseText);
-                    console.log(obj);
                     this.setState({ stores: obj });
+                    return obj;
                 }
             }.bind(this);
             request.send();
@@ -123,6 +133,14 @@ class ReactAJAX extends React.Component {
         return (
             <React.Fragment>
                 <Tab
+                    activeIndex={this.state.activeIndex ? this.state.activeIndex : 0}
+                    onTabChange={(e, { activeIndex }) => {
+                        this.setState({
+                            activeIndex,
+                        });
+                        sessionStorage.setItem('activeIndex', activeIndex);
+                    }
+                    }
                     menu={{ color:'grey', inverted: true, attached: false, tabular: false }}
                     panes={this.state.panes}
                 />
